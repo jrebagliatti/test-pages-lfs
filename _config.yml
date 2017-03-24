@@ -10,7 +10,7 @@ use_static_category_list: false # true/false: use true to indicate that site wil
                                # the static category list to build the category tree. 
                                # Use false to indicate the site to build the category 
                                # tree dynamically using the posts' metadata 
-
+git_lfs_server_url: "https://media.githubusercontent.com/media/jrebagliatti/test-pages-lfs/master"
 # Build settings
 # markdown: redcarpet
 # highlighter: pygments
