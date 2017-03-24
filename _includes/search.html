@@ -1,0 +1,114 @@
+{% assign useStaticList = site.use_static_category_list %}
+{% assign categories = "" | split: "|" %}
+
+{% if useStaticList == true %}
+    {% assign categoriesDataList = site.data.categoriesStatic %}
+{% else %}
+    {% assign categoriesDataList = site.data.categories %}
+{% endif %}
+
+{% for category in categoriesDataList %}
+    {% if useStaticList == true %}
+        {% assign categoryElements = category.values %}
+    {% else %}
+        {% assign categoryElements = "" | split: "|" %}    
+    
+        {% for post in site.posts %}
+            
+            {% comment %} Convert the post metadata into an array, so it can handle the same way no mather what data type the metadata has {% endcomment %}
+
+            {% assign postDataArray = post[category.metadataField] | join: "##" | split: "##"   %}
+
+            {% for postData in postDataArray %}
+
+                {% if categoryElements contains postData %}
+                {% else %}
+                    {% assign categoryElements = categoryElements | push: postData  %}
+                {% endif %}
+
+            {% endfor %}
+
+        {% endfor %}
+
+    {% endif %}
+
+    {% assign categories = categories | push: categoryElements %}
+
+{% endfor %}
+
+<div class="sf-container search-filters">
+    <div class="search-filters-inner">
+        <div style="text-align: right;">
+            <a class="search-filter-button glyphicon glyphicon-remove" href="javascript:void(0)"></a>
+        </div>
+        <h1 class="inline-heading">Find and Filter</h1>&nbsp;<a href="javascript:void(0)" id="ResetSearch">Clear all filters</a>
+        <div class="pad-bottom">
+            Use the filter and keyword search below to find stories that matter to you.
+        </div>
+
+        <form id="AdvancedSearch" class="form-horizontal" onsubmit="return customSearch.applyFilters(true);">
+            <div class="pad-bottom">
+                <h2>Refine results by:</h2>
+                <div class="treeview">
+                    <ul>
+                        {% assign i = 0 %}
+                        {% for category in site.data.categories %}
+                        <li>
+                            <input type="checkbox" id="chk{{ category.name }}">
+                            <label>
+                                <input class="search-value" name="Filters" value="{{ category.name }}" type="checkbox">
+                                <span class="treeview-checkbox"></span>
+                            </label>
+                            <label class="tree-root" for="chk{{ category.name }}">
+                                {{ category.showAs }} <label class="items-selected"></label>
+                            </label>
+                            <ul>
+                                {% comment %} Determine if the category should be sorted or not. {% endcomment %}
+                                
+                                {% if category.sorted == true %}
+                                    {% assign items = categories[i] | sort %}
+                                {% else %}
+                                    {% assign items = categories[i] %}
+                                {% endif %}
+                                
+                                {% for item in items %}
+                                <li>
+                                    <input type="checkbox" id="item-{{ category.name }}-{{ item.name }}">
+                                    <label>
+                                        <input class="search-value" name="{{ category.name }}" type="checkbox" value="{{ item }}">
+                                        <span class="treeview-checkbox"></span>
+                                    </label>
+                                    <label class="remove-tree-control treeview-label" for="idc3c1668c-a145-4316-b84b-aa747027b20f">
+                                        {{ item }}
+                                    </label>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                            {% assign i = i | plus: 1 %}
+                        {% endfor %}
+                    </ul>
+
+                    <div>
+                        <div class="input-group pad-bottom">
+                            <input aria-label="..." class="form-control" id="SearchPhraseText" name="SearchPhraseText" placeholder="Enter keyword here (optional)" value="" type="text">
+                            <div class="input-group-btn dropup hide">
+                                <a id="SearchPhraseScopeButton" class="btn btn-default btn-search-scope dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span id="SearchPhraseScopeString">Application</span> <span class="caret"></span>
+                                </a>
+                                <ul id="SearchPhraseScopeSelection" class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        <a data-searchphrasescope="1" href="#">Technical Solution Stories</a>
+                                    </li>
+                                </ul>
+                            </div><!-- /btn-group -->
+                        </div><!-- /input-group -->
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-search search-refine hide" onclick="return customSearch.applyFilters(true)" >Search or Refine</button>
+            <button type="button" class="btn btn-primary btn-search search-all" onclick="return customSearch.removeFilters(true)" >Browse All Stories</button>
+        </form>
+    </div>
+</div>
+<div class="search-filters-fade-in"></div>
