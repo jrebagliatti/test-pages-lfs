@@ -8,6 +8,6 @@ before_scripts:
 env:
     - commit = $TRAVIS_COMMIT_RANGE
 
-after_succes:
+after_success:
   - git remote add public git@github.com:jrebagliatti/test-pages-lfs-public.git
   - git push public master
