@@ -5,9 +5,15 @@ before_scripts:
   - npm install -g mocha
   - npm install git
 
+branches:
+  only:
+  - master
+  
 env:
     - commit = $TRAVIS_COMMIT_RANGE
 
-after_success:
-  - git remote add public https://jrebagliatti:$GITHUB_API_KEY@github.com/jrebagliatti/test-pages-lfs-public
-  - git push public master
+after_success: |
+  if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
+    git remote add public https://jrebagliatti:$GITHUB_API_KEY@github.com/jrebagliatti/test-pages-lfs-public
+    git push public master
+  fi
