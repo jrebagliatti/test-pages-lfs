@@ -3,7 +3,8 @@ var assert = require('assert'),
 	execSync = require('child_process').execSync,
 	fs = require('fs'),
 	url = require('url'),
-	path = require('path')
+	path = require('path'),
+	sizeOf = require('image-size');
 //	fileName = '2016-05-19-template.md';
 	commitRange = process.env['TRAVIS_COMMIT_RANGE'];
 var PostDirectory = "_posts";
@@ -63,6 +64,12 @@ var ModifiedFilesArray = GetModifedfiles(commitRange);
 console.log(ModifiedFilesArray);
 console.log(Object.keys(ModifiedFilesArray).length);
 
+describe("Check image size", function(){
+	var dimensions = sizeOf('images/foize1.jpg');
+	console.log(dimensions.width, dimensions.height);
+}
+
+/*
 describe("Check Files modified", function(){
 	after(function(){
 		console.log(linkCount);
@@ -303,7 +310,7 @@ describe("Check Files modified", function(){
 						});
 
 						// 	it("Verify resources", function () {
-						// 	pattern = /\s*((## [Rr]esources ##)+)([\s\S]*?)\s*/
+						// 	pattern = /\s*((## [Rr]esources ##)+)([\s\S]*?)\s* /
 						// 	assert.ok (pattern.test(contents));
 
 						// });
@@ -315,3 +322,4 @@ describe("Check Files modified", function(){
 	});	
 });
 
+*/
