@@ -4,7 +4,7 @@ node_js:
 before_scripts:
   - npm install -g mocha
   - npm install git
-  - npm install image-size
+  - npm install image-size --save
 
 branches:
   only:
