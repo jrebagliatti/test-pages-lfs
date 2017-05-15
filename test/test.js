@@ -67,7 +67,7 @@ console.log(Object.keys(ModifiedFilesArray).length);
 describe("Check image size", function(){
 	var dimensions = sizeOf('images/foize1.jpg');
 	console.log(dimensions.width, dimensions.height);
-}
+});
 
 /*
 describe("Check Files modified", function(){
